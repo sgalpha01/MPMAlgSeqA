@@ -1,6 +1,7 @@
-from datetime import datetime
 import os
 import webbrowser
+from datetime import datetime
+from typing import Tuple
 
 import PySimpleGUI as sg
 
@@ -11,7 +12,17 @@ class Matching:
     def __init__(self):
         self.matching = PM()
 
-    def match(self, seq, pat):
+    def match(self, seq: str, pat: str) -> Tuple[bool, str]:
+        """Read sequence and patterns files and apply PatterMatching algorithm
+
+        Args:
+            seq (str): path of sequence file as read from gui
+            pat (str): path of patterns file as read from gui
+
+        Returns:
+            Tuple[bool, str]: if error occurs while reading/writing files
+                            and path of output file.
+        """
         no_error = True
         try:
             with open(seq) as sequence, open(pat) as patterns:
@@ -27,9 +38,9 @@ class Matching:
                             f"match indices: {self.matching.proposed_match()}\n\n"
                         )
 
-        except (IOError, OSError) as e:
+        except (IOError, OSError) as err:
             no_error = False
-            print(e)
+            print(err)
 
         return no_error, out_file_name
 
@@ -60,27 +71,26 @@ class Gui:
 
 
 def main():
+    """implementation of gui"""
     m = Matching()
-    g = Gui()
+    gui = Gui()
     while True:
-        event, values = g.window.Read()
+        event, values = gui.window.Read()
         if event in (sg.WIN_CLOSED, "Exit"):
             break
 
         if event == "-SUBMIT-":
             ret = m.match(values["sequence_location"], values["pattern_location"])
             if ret[0]:
-                g.window["-OPENOUT-"].update(visible=True)
-                print(
-                    f">> Results saved to '{os.path.join(os.getcwd(), ret[1])}'"
-                )
+                gui.window["-OPENOUT-"].update(visible=True)
+                print(f">> Results saved to '{os.path.join(os.getcwd(), ret[1])}'")
                 print(">> Click on 'Open Output File' Button to open it.")
 
         if event == "_CLEAR_":
-            g.window["-OPENOUT-"].update(visible=False)
-            g.window["-OUTPUT-"].Update("")
-            g.window["sequence_location"].Update("")
-            g.window["pattern_location"].Update("")
+            gui.window["-OPENOUT-"].update(visible=False)
+            gui.window["-OUTPUT-"].Update("")
+            gui.window["sequence_location"].Update("")
+            gui.window["pattern_location"].Update("")
 
         if event == "-OPENOUT-":
             webbrowser.open(ret[1])

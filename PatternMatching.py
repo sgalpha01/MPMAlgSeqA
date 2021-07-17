@@ -1,4 +1,6 @@
+import time
 from collections import defaultdict
+from typing import List
 
 
 class PatternMatching:
@@ -8,7 +10,7 @@ class PatternMatching:
         self.text = text
         self.pattern = pattern
 
-    def naive_match(self, text: str = None, pattern: str = None) -> list[int]:
+    def naive_match(self, text: str = None, pattern: str = None) -> List[int]:
         """Implementation of brute-force algorithm
 
         Args:
@@ -16,7 +18,7 @@ class PatternMatching:
             pattern (str, optional): pattern to be matched in sequence. Defaults to None.
 
         Returns:
-            list[int]: List of integer indices where match occurs, if any.
+            List[int]: List of integer indices where match occurs, if any.
         """
         if text is None:
             text = self.text
@@ -36,13 +38,13 @@ class PatternMatching:
         return indices
 
     @classmethod
-    def _preprocess_proposed_match(cls, text: str) -> dict[str : list[int]]:
+    def _preprocess_proposed_match(cls, text: str) -> dict[str : List[int]]:
         for i in range(len(text) - 1):
             cls._preprocess_proposed_match_data[text[i : i + 2]].add(i)
 
         return cls._preprocess_proposed_match_data
 
-    def proposed_match(self, text: str = None, pattern: str = None) -> list[int]:
+    def proposed_match(self, text: str = None, pattern: str = None) -> List[int]:
         """Implementation of the proposed algorithm
 
         Args:
@@ -50,7 +52,7 @@ class PatternMatching:
             pattern (str, optional): pattern to be matched in sequence. Defaults to None.
 
         Returns:
-            list[int]: List of integer indices where match occurs, if any.
+            List[int]: List of integer indices where match occurs, if any.
         """
 
         if text is None:
@@ -97,17 +99,14 @@ class PatternMatching:
                         break
 
             # To handle odd length pattern
-            try:
+            if len(pattern) % 2 == 0:
                 if cont and text[curr_align + k - 1] == pattern[-1]:
                     indices.append(curr_align)
-            except (KeyError, IndexError):
-                continue
 
         return indices
 
     def performance(self) -> None:
         """Compares the runtime of naive algorithm and the proposed algorithm"""
-        import time
 
         funcs = [self.naive_match, self.proposed_match]
 
