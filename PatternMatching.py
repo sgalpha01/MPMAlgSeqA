@@ -99,9 +99,11 @@ class PatternMatching:
                         break
 
             # To handle odd length pattern
-            if len(pattern) % 2 == 0:
+            if len(pattern) % 2 != 0:
                 if cont and text[curr_align + k - 1] == pattern[-1]:
                     indices.append(curr_align)
+            elif cont:
+                indices.append(curr_align)
 
         return indices
 
