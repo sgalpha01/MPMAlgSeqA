@@ -3,7 +3,9 @@
 This repo contains a Desktop Application which can be used to find multiple patterns in a large DNA sequence.
 After opening, you can find two boxes. One is for sequence, and other is for Patterns.
 File format for both is `.txt`.
+
 Example:
+
 `sequence.txt`
 ```
 CGGTAAGCCGGCCAAATAGATCCCGACAGTTATAGTCGAGCATTTCAGTCACGTCTA
@@ -28,7 +30,7 @@ AACGGACACG
 CCGACAGAACT
 ```
 
-More information will be added soon. For now, I am only adding information on how to use it.
+More information will be added soon. For now, I am only adding information on how to run it.
 
 ## Option 1
 
